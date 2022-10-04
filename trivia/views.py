@@ -1,6 +1,5 @@
 from unicodedata import category
 from django.http import Http404
-from itertools import product
 
 from django.shortcuts import render
 from django.db.models import Q
@@ -10,26 +9,26 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
 
-from .models import Category, Product
-from .serializer import ProductSerializer, CategorySerializer
+from .models import Category, Trivia
+from .serializer import TriviaSerializer, CategorySerializer
 # Create your views here.
 
-class LatestProductsList(APIView):
+class LatestTriviasList(APIView):
   def get(self, request, format=None):
-    products = Product.objects.all()[0:4]
-    serializer = ProductSerializer(products, many=True)
+    trivias = Trivia.objects.all()[0:4]
+    serializer = TriviaSerializer(trivias, many=True)
     return Response(serializer.data)
 
 
-class ProductDetail(APIView):
-  def get_object(self, category_slug, product_slug):
+class TriviaDetail(APIView):
+  def get_object(self, category_slug, trivia_slug):
     try:
-      return Product.objects.filter(category__slug=category_slug).get(slug=product_slug)
-    except Product.DoesNotExist:
+      return Trivia.objects.filter(category__slug=category_slug).get(slug=trivia_slug)
+    except Trivia.DoesNotExist:
       raise Http404
-  def get(self, request, category_slug, product_slug, format=None):
-    product = self.get_object(category_slug, product_slug)
-    serializer = ProductSerializer(product)
+  def get(self, request, category_slug, trivia_slug, format=None):
+    trivia = self.get_object(category_slug, trivia_slug)
+    serializer = TriviaSerializer(trivia)
     return Response(serializer.data)
 class CategoryDetail(APIView):
   def get_object(self, category_slug):
@@ -47,8 +46,8 @@ def search(request):
   query = request.data.get('query', '')
   
   if query:
-    products = Product.objects.filter(Q(name__icontains=query) | Q(description__icontains=query))
-    serializer = ProductSerializer(products, many=True)
+    trivias = Trivia.objects.filter(Q(name__icontains=query) | Q(description__icontains=query))
+    serializer = TriviaSerializer(trivias, many=True)
     return Response(serializer.data)
   else:
-    return Response({"products": []})
+    return Response({"trivias": []})

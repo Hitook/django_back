@@ -1,26 +1,25 @@
 from rest_framework import serializers
-from .models import Category, Product
+from .models import Category, Trivia
 
-class ProductSerializer(serializers.ModelSerializer):
+class TriviaSerializer(serializers.ModelSerializer):
   class Meta:
-    model = Product
+    model = Trivia
     fields = (
       "id",
       "name",
       "get_absolute_url",
       "description",
-      "price",
-      "get_image",
-      "get_thumbnail"
+      "questions",
+      "average_score"
     )
 
 class CategorySerializer(serializers.ModelSerializer):
-  products = ProductSerializer(many=True)
+  trivias = TriviaSerializer(many=True)
   class Meta:
     model = Category
     fields = (
       "id",
       "name",
       "get_absolute_url",
-      "products",
+      "trivias",
     )
