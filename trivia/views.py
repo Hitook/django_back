@@ -19,6 +19,11 @@ class LatestTriviasList(APIView):
     serializer = TriviaSerializer(trivias, many=True)
     return Response(serializer.data)
 
+class DisplayCategoriesList(APIView):
+  def get(self, request, format=None):
+    categories = Category.objects.all()
+    serializer = CategorySerializer(categories, many=True)
+    return Response(serializer.data)
 
 class TriviaDetail(APIView):
   def get_object(self, category_slug, trivia_slug):
