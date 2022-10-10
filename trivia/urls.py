@@ -9,4 +9,5 @@ urlpatterns = [
   path('trivias/search/', views.search),
   path('trivias/<slug:category_slug>/<slug:trivia_slug>/', views.TriviaDetail.as_view()),
   path('trivias/<slug:category_slug>/', views.CategoryDetail.as_view()),
+  path('<slug:trivia_slug>/questions', views.QuestionDetail.as_view()),
 ]

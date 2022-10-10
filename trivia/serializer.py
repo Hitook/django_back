@@ -1,6 +1,17 @@
 from rest_framework import serializers
-from .models import Category, Trivia
+from .models import Category, Trivia, Question
 
+class QuestionSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Question
+    fields = (
+      "id",
+      "question",
+      "correct_answer",
+      "fake_answer",
+      "trivia",
+    )
+  
 class TriviaSerializer(serializers.ModelSerializer):
   class Meta:
     model = Trivia
