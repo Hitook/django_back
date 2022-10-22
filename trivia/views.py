@@ -9,8 +9,8 @@ from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
 
-from .models import Category, Trivia, Question
-from .serializer import TriviaSerializer, CategorySerializer, QuestionSerializer
+from .models import Account, Category, Trivia, Question, Favorite
+from .serializer import TriviaSerializer, CategorySerializer, QuestionSerializer, AccountSerializer, FavoriteSerializer
 from trivia import serializer
 # Create your views here.
 
@@ -62,6 +62,24 @@ class QuestionDetail(APIView):
   def get(self, request, trivia_slug, format=None):
     question = self.get_object(trivia_slug)
     serializer = QuestionSerializer(question, many=True)
+    return Response(serializer.data)
+
+class AccountDetail(APIView):
+  def get(self, request, format=None):
+    print('--------------------------------')
+    trivias = Trivia.objects.all()[0:4]
+    serializer = TriviaSerializer(trivias, many=True)
+    return Response(serializer.data)
+
+class FavoriteDetail(APIView):
+  def get_object(self, user_id):
+    try:
+      return Favorite.objects.all()
+    except Favorite.DoesNotExist:
+      raise Http404
+  def get(self, request, user_id, format=None):
+    favorite = self.get_object(user_id)
+    serializer = FavoriteSerializer(favorite)
     return Response(serializer.data)
 
 @api_view(['POST'])

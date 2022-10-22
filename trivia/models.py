@@ -7,8 +7,19 @@ from unittest.util import _MAX_LENGTH
 from PIL import Image
 
 from django.db import models
+from django.contrib.auth.models import User
 from django.core.files import File
 # Create your models here.
+class Account(models.Model):
+  user = models.OneToOneField(User, on_delete=models.CASCADE)
+  date_added = models.DateTimeField(auto_now_add=True)
+
+  class Meta:
+    ordering = ('-date_added',)
+
+  def __unicode__(self):
+    return self.user.get_full_name()
+
 class Category(models.Model):
   name = models.CharField(max_length=255)
   slug = models.SlugField()
@@ -47,6 +58,14 @@ class Question(models.Model):
   fake_answer = models.CharField(max_length=50)
   class Meta:
     ordering = ('id',)
+
+  def __str__(self):
+    return self.question
+
+class Favorite(models.Model):
+  trivia = models.ForeignKey(Trivia, related_name='favorite', on_delete=models.CASCADE)
+  category = models.ForeignKey(Category, related_name='favorite', on_delete=models.CASCADE)
+  user = models.ForeignKey(Account, related_name='account', on_delete=models.CASCADE)
 
   def __str__(self):
     return self.question
