@@ -1,5 +1,6 @@
 from rest_framework import serializers
-from .models import Category, Trivia, Question
+from .models import Category, Trivia, Question, User, Favorite
+
 
 class QuestionSerializer(serializers.ModelSerializer):
   class Meta:
@@ -33,4 +34,14 @@ class CategorySerializer(serializers.ModelSerializer):
       "name",
       "get_absolute_url",
       "trivias",
+    )
+
+class FavoriteSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Favorite
+    fields = (
+      "id",
+      "user_id",
+      "trivia_id",
+      "category_id",
     )
