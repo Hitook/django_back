@@ -4,14 +4,15 @@ from tkinter import Image
 from io import BytesIO
 from unicodedata import category, decimal
 from unittest.util import _MAX_LENGTH
-from PIL import Image
+# from PIL import Image
 
 from django.db import models
+from django.conf import settings
 from django.contrib.auth.models import User
 from django.core.files import File
 # Create your models here.
-class Account(models.Model):
-  user = models.OneToOneField(User, on_delete=models.CASCADE)
+class User(models.Model):
+  user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
   date_added = models.DateTimeField(auto_now_add=True)
 
   class Meta:
@@ -65,8 +66,11 @@ class Question(models.Model):
 class Favorite(models.Model):
   trivia = models.ForeignKey(Trivia, related_name='favorite', on_delete=models.CASCADE)
   category = models.ForeignKey(Category, related_name='favorite', on_delete=models.CASCADE)
-  user = models.ForeignKey(Account, related_name='account', on_delete=models.CASCADE)
+  user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='favorite', on_delete=models.CASCADE)
+
+  class Meta:
+      ordering = ('id',)
 
   def __str__(self):
-    return self.question
+    return str(self.trivia.name)
 

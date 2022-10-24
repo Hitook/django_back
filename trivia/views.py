@@ -5,12 +5,16 @@ from django.shortcuts import render
 from django.db.models import Q
 
 from rest_framework.views import APIView
+from rest_framework.authtoken.views import ObtainAuthToken
+from rest_framework.authtoken.models import Token
 from rest_framework.response import Response
 from rest_framework.decorators import api_view
 
+import trivia
 
-from .models import Account, Category, Trivia, Question, Favorite
-from .serializer import TriviaSerializer, CategorySerializer, QuestionSerializer, AccountSerializer, FavoriteSerializer
+
+from .models import Category, Favorite, Trivia, Question
+from .serializer import TriviaSerializer, CategorySerializer, QuestionSerializer, FavoriteSerializer
 from trivia import serializer
 # Create your views here.
 
@@ -42,6 +46,16 @@ class TriviaDetail(APIView):
     serializer = QuestionSerializer(questions, many=True)
     return Response(serializer.data)
 
+class TriviaDetailViaID(APIView):
+  def get_object(self, trivia_id):
+    try:
+      return Trivia.objects.filter(id = trivia_id)
+    except Question.DoesNotExist:
+      raise Http404
+  def get(self, request, trivia_id, format=None):
+    trivias = self.get_object(trivia_id)
+    serializer = TriviaSerializer(trivias, many=True)
+    return Response(serializer.data)
 class CategoryDetail(APIView):
   def get_object(self, category_slug):
     try:
@@ -64,23 +78,50 @@ class QuestionDetail(APIView):
     serializer = QuestionSerializer(question, many=True)
     return Response(serializer.data)
 
-class AccountDetail(APIView):
-  def get(self, request, format=None):
-    print('--------------------------------')
-    trivias = Trivia.objects.all()[0:4]
-    serializer = TriviaSerializer(trivias, many=True)
-    return Response(serializer.data)
-
 class FavoriteDetail(APIView):
   def get_object(self, user_id):
     try:
-      return Favorite.objects.all()
-    except Favorite.DoesNotExist:
+      return Favorite.objects.filter(user_id = user_id)
+    except Question.DoesNotExist:
       raise Http404
   def get(self, request, user_id, format=None):
-    favorite = self.get_object(user_id)
-    serializer = FavoriteSerializer(favorite)
+    favorites = self.get_object(user_id)
+    serializer = FavoriteSerializer(favorites, many=True)
     return Response(serializer.data)
+
+class FavoriteList(APIView):
+  def get(self, request, format=None):
+    favorites = Favorite.objects.all()
+    serializer = FavoriteSerializer(favorites, many=True)
+    return Response(serializer.data)
+
+class CustomAuthToken(ObtainAuthToken):
+
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data,
+                                           context={'request': request})
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        token, created = Token.objects.get_or_create(user=user)
+        return Response({
+            'token': token.key,
+            'user_id': user.pk,
+            'email': user.email
+        })
+
+class UserInfo(ObtainAuthToken):
+    def post(self, request, *args, **kwargs):
+        serializer = self.serializer_class(data=request.data,
+                                           context={'request': request})
+        print(serializer)
+        serializer.is_valid(raise_exception=True)
+        user = serializer.validated_data['user']
+        print(user.username)
+        return Response({
+          'username' : user.username,
+          'user_id': user.pk,
+          'email': user.email
+        })
 
 @api_view(['POST'])
 def search(request):
