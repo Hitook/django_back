@@ -20,6 +20,7 @@ from trivia import serializer
 
 class LatestTriviasList(APIView):
   def get(self, request, format=None):
+    print(request)
     trivias = Trivia.objects.all()[0:4]
     serializer = TriviaSerializer(trivias, many=True)
     return Response(serializer.data)
@@ -89,11 +90,15 @@ class FavoriteDetail(APIView):
     serializer = FavoriteSerializer(favorites, many=True)
     return Response(serializer.data)
 
-class FavoriteList(APIView):
-  def get(self, request, format=None):
-    favorites = Favorite.objects.all()
-    serializer = FavoriteSerializer(favorites, many=True)
-    return Response(serializer.data)
+class AddFavorite(APIView):
+  def add_favorite(self,category_id, trivia_id, user_id):
+    try:
+      return Favorite.objects.create( category_id = category_id, trivia_id = trivia_id, user_id = user_id)
+    except Question.DoesNotExist:
+      raise Http404
+  def post(self, request, category_id, trivia_id, user_id, format=None):
+    self.add_favorite(category_id, trivia_id, user_id)
+    return Response("Added")
 
 class CustomAuthToken(ObtainAuthToken):
 
@@ -113,10 +118,8 @@ class UserInfo(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data,
                                            context={'request': request})
-        print(serializer)
         serializer.is_valid(raise_exception=True)
         user = serializer.validated_data['user']
-        print(user.username)
         return Response({
           'username' : user.username,
           'user_id': user.pk,

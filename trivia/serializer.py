@@ -18,6 +18,7 @@ class TriviaSerializer(serializers.ModelSerializer):
     model = Trivia
     fields = (
       "id",
+      "category_id",
       "name",
       "get_absolute_url",
       "description",
