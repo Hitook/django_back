@@ -23,10 +23,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-1k(jmy9ud&x^56zm$6#-lcqqf=17r2gb6_)n-(#uw2e_m9avjy'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
-    '44.203.134.65'
+    '44.203.134.65',
+    '127.0.0.1'
 ]
 
 
@@ -90,11 +91,11 @@ WSGI_APPLICATION = 'django_back.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'postgres', 
-        'USER': 'postgres', 
-        'PASSWORD': 'potatoes',
-        'HOST': 'database-hw3.c7ndfrbojbla.us-east-2.rds.amazonaws.com', 
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'triviadatabase', 
+        'USER': 'triviadatabase', 
+        'PASSWORD': 'triviaDB1',
+        'HOST': 'triviadatabase.cmmc1msoyjqm.us-east-1.rds.amazonaws.com', 
         'PORT': '5432',
     }
 }
