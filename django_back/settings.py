@@ -90,11 +90,11 @@ WSGI_APPLICATION = 'django_back.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'postgres', 
-        'USER': 'postgres', 
-        'PASSWORD': 'potatoes',
-        'HOST': 'database-hw3.c7ndfrbojbla.us-east-2.rds.amazonaws.com', 
+        'ENGINE': 'django.db.backends.postgresql',
+        'NAME': 'triviadatabase', 
+        'USER': 'triviadatabase', 
+        'PASSWORD': 'triviaDB1',
+        'HOST': 'triviadatabase.cmmc1msoyjqm.us-east-1.rds.amazonaws.com', 
         'PORT': '5432',
     }
 }
@@ -142,3 +142,13 @@ MEDIA_ROOT = BASE_DIR / 'media/'
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Test Stuff
+
+REST_FRAMEWORK = {
+    'TEST_REQUEST_DEFAULT_FORMAT': 'json',
+
+    'TEST_REQUEST_RENDERER_CLASSES': (
+      'rest_framework.renderers.JSONRenderer',
+    ),
+}

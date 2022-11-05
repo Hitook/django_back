@@ -15,5 +15,7 @@ urlpatterns = [
   path('user-info/', views.UserInfo.as_view()),
   path('favorites/<int:user_id>/', views.FavoriteDetail.as_view()),
   path('favorite/<int:category_id>/<int:trivia_id>/<int:user_id>/', views.AddFavorite.as_view()),
+  path('defavorite/<int:category_id>/<int:trivia_id>/<int:user_id>/', views.UnaddFavorite.as_view()),
+  path('isfavorite/<int:category_id>/<int:trivia_id>/<int:user_id>/', views.IsFavorite.as_view()),
 
 ]
