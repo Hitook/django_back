@@ -217,7 +217,7 @@ def search(request):
   query = request.data.get('query', '')
   # Implement searching by category
   if query:
-    trivias = Trivia.objects.filter(Q(name__icontains=query) | Q(description__icontains=query))
+    trivias = Trivia.objects.filter(Q(name__icontains=query) | Q(description__icontains=query) | Q(category__name__icontains=query))
     serializer = TriviaSerializer(trivias, many=True)
     return Response(serializer.data)
   else:
