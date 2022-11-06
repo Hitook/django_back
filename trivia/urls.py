@@ -14,9 +14,14 @@ urlpatterns = [
   path('<slug:trivia_slug>/questions', views.QuestionDetail.as_view()),
   path('api-token-auth/', views.CustomAuthToken.as_view()),
   path('user-info/', views.UserInfo.as_view()),
-  path('favorites/<int:user_id>/', views.FavoriteDetail.as_view()),
-  path('favorite/<int:category_id>/<int:trivia_id>/<int:user_id>/', views.AddFavorite.as_view()),
-  path('defavorite/<int:category_id>/<int:trivia_id>/<int:user_id>/', views.UnaddFavorite.as_view()),
-  path('isfavorite/<int:category_id>/<int:trivia_id>/<int:user_id>/', views.IsFavorite.as_view()),
+  path('trivia/favorites/<int:user_id>/', views.TriviaFavoriteDetail.as_view()),
+  path('trivia/favorite/<int:category_id>/<int:trivia_id>/<int:user_id>/', views.AddTriviaFavorite.as_view()),
+  path('trivia/defavorite/<int:category_id>/<int:trivia_id>/<int:user_id>/', views.UnaddTriviaFavorite.as_view()),
+  path('trivia/isfavorite/<int:category_id>/<int:trivia_id>/<int:user_id>/', views.IsTriviaFavorite.as_view()),
+  path('category/<int:category_id>/', views.CategoryDetailViaID.as_view()),
+  path('categories/favorites/<int:user_id>/', views.CategoryFavoriteDetail.as_view()),
+  path('category/favorite/<int:category_id>/<int:user_id>/', views.AddCategoryFavorite.as_view()),
+  path('category/defavorite/<int:category_id>/<int:user_id>/', views.UnaddCategoryFavorite.as_view()),
+  path('category/isfavorite/<int:category_id>/<int:user_id>/', views.IsCategoryFavorite.as_view()),
 
 ]

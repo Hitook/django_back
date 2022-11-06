@@ -63,7 +63,7 @@ class Question(models.Model):
   def __str__(self):
     return self.question
 
-class Favorite(models.Model):
+class TriviaFavorite(models.Model):
   trivia = models.ForeignKey(Trivia, related_name='favorite', on_delete=models.CASCADE)
   category = models.ForeignKey(Category, related_name='favorite', on_delete=models.CASCADE)
   user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='favorite', on_delete=models.CASCADE)
@@ -73,6 +73,15 @@ class Favorite(models.Model):
 
   def __str__(self):
     return str(self.trivia.name)
+
+class CategoryFavorite(models.Model):
+  category = models.ForeignKey(Category, related_name='category_favorite', on_delete=models.CASCADE)
+  user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='category_favorite', on_delete=models.CASCADE)
+  class Meta:
+      ordering = ('id',)
+
+  def __str__(self):
+    return str(self.category.name)
 
 class Score(models.Model):
   trivia = models.ForeignKey(Trivia, related_name='score', on_delete=models.CASCADE)

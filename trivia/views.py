@@ -13,8 +13,8 @@ from rest_framework.decorators import api_view
 import trivia
 
 
-from .models import Category, Favorite, Trivia, Question, Score
-from .serializer import TriviaSerializer, CategorySerializer, QuestionSerializer, FavoriteSerializer, ScoreSerializer
+from .models import Category, TriviaFavorite, CategoryFavorite, Trivia, Question, Score
+from .serializer import TriviaSerializer, CategorySerializer, QuestionSerializer, TriviaFavoriteSerializer, CategoryFavoriteSerializer, ScoreSerializer
 from trivia import serializer
 # Create your views here.
 
@@ -78,31 +78,31 @@ class QuestionDetail(APIView):
     serializer = QuestionSerializer(question, many=True)
     return Response(serializer.data)
 
-class FavoriteDetail(APIView):
+class TriviaFavoriteDetail(APIView):
   def get_object(self, user_id):
     try:
-      return Favorite.objects.filter(user_id = user_id)
+      return TriviaFavorite.objects.filter(user_id = user_id)
     except Question.DoesNotExist:
       raise Http404
   def get(self, request, user_id, format=None):
     favorites = self.get_object(user_id)
-    serializer = FavoriteSerializer(favorites, many=True)
+    serializer = TriviaFavoriteSerializer(favorites, many=True)
     return Response(serializer.data)
 
-class AddFavorite(APIView):
+class AddTriviaFavorite(APIView):
   def add_favorite(self,category_id, trivia_id, user_id):
     try:
-      return Favorite.objects.create( category_id = category_id, trivia_id = trivia_id, user_id = user_id)
+      return TriviaFavorite.objects.create( category_id = category_id, trivia_id = trivia_id, user_id = user_id)
     except Question.DoesNotExist:
       raise Http404
   def post(self, request, category_id, trivia_id, user_id, format=None):
     self.add_favorite(category_id, trivia_id, user_id)
     return Response("Added")
 
-class UnaddFavorite(APIView):
+class UnaddTriviaFavorite(APIView):
   def unadd_favorite(self,category_id, trivia_id, user_id):
     try:
-      query = Favorite.objects.get( category_id = category_id, trivia_id = trivia_id, user_id = user_id)
+      query = TriviaFavorite.objects.get( category_id = category_id, trivia_id = trivia_id, user_id = user_id)
       query.delete()
       return Response("Deleted!")
     except Question.DoesNotExist:
@@ -111,15 +111,70 @@ class UnaddFavorite(APIView):
     self.unadd_favorite(category_id, trivia_id, user_id)
     return Response("Added!")
 
-class IsFavorite(APIView):
+class IsTriviaFavorite(APIView):
   def is_favorite(self,category_id, trivia_id, user_id):
     try:
-      query = Favorite.objects.get( category_id = category_id, trivia_id = trivia_id, user_id = user_id)
+      query = TriviaFavorite.objects.get( category_id = category_id, trivia_id = trivia_id, user_id = user_id)
       return True
     except:
       return False
   def get(self, request, category_id, trivia_id, user_id, format=None):
     return Response(self.is_favorite(category_id, trivia_id, user_id))
+
+class CategoryDetailViaID(APIView):
+  def get_object(self, category_id):
+    try:
+      return Category.objects.filter(id = category_id)
+    except Question.DoesNotExist:
+      raise Http404
+  def get(self, request, category_id, format=None):
+    categries = self.get_object(category_id)
+    serializer = CategorySerializer(categries, many=True)
+    return Response(serializer.data)
+
+
+class CategoryFavoriteDetail(APIView):
+  def get_object(self, user_id):
+    try:
+      return CategoryFavorite.objects.filter(user_id = user_id)
+    except Question.DoesNotExist:
+      raise Http404
+  def get(self, request, user_id, format=None):
+    favorites = self.get_object(user_id)
+    serializer = CategoryFavoriteSerializer(favorites, many=True)
+    return Response(serializer.data)
+
+class AddCategoryFavorite(APIView):
+  def add_favorite(self,category_id, user_id):
+    try:
+      return CategoryFavorite.objects.create( category_id = category_id, user_id = user_id)
+    except Question.DoesNotExist:
+      raise Http404
+  def post(self, request, category_id, user_id, format=None):
+    self.add_favorite(category_id, user_id)
+    return Response("Added")
+
+class UnaddCategoryFavorite(APIView):
+  def unadd_favorite(self,category_id, user_id):
+    try:
+      query = CategoryFavorite.objects.get( category_id = category_id, user_id = user_id)
+      query.delete()
+      return Response("Deleted!")
+    except Question.DoesNotExist:
+      raise Http404
+  def post(self, request, category_id, user_id, format=None):
+    self.unadd_favorite(category_id, user_id)
+    return Response("Added!")
+
+class IsCategoryFavorite(APIView):
+  def is_favorite(self,category_id, user_id):
+    try:
+      query = CategoryFavorite.objects.get( category_id = category_id, user_id = user_id)
+      return True
+    except:
+      return False
+  def get(self, request, category_id, user_id, format=None):
+    return Response(self.is_favorite(category_id, user_id))
 
 class SubmitTrivia(APIView):
   def submit_trivia(self, user_id):
@@ -129,7 +184,7 @@ class SubmitTrivia(APIView):
       raise Http404
   def post(self, request, user_id, format=None):
     favorites = self.submit_trivia(user_id)
-    serializer = FavoriteSerializer(favorites, many=True)
+    serializer = TriviaFavoriteSerializer(favorites, many=True)
     return Response(serializer.data)
 class CustomAuthToken(ObtainAuthToken):
 
