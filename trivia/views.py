@@ -13,8 +13,8 @@ from rest_framework.decorators import api_view
 import trivia
 
 
-from .models import Category, Favorite, Trivia, Question
-from .serializer import TriviaSerializer, CategorySerializer, QuestionSerializer, FavoriteSerializer
+from .models import Category, Favorite, Trivia, Question, Score
+from .serializer import TriviaSerializer, CategorySerializer, QuestionSerializer, FavoriteSerializer, ScoreSerializer
 from trivia import serializer
 # Create your views here.
 
@@ -121,6 +121,16 @@ class IsFavorite(APIView):
   def get(self, request, category_id, trivia_id, user_id, format=None):
     return Response(self.is_favorite(category_id, trivia_id, user_id))
 
+class SubmitTrivia(APIView):
+  def submit_trivia(self, user_id):
+    try:
+      return Score.objects.create(user_id = user_id)
+    except Question.DoesNotExist:
+      raise Http404
+  def post(self, request, user_id, format=None):
+    favorites = self.submit_trivia(user_id)
+    serializer = FavoriteSerializer(favorites, many=True)
+    return Response(serializer.data)
 class CustomAuthToken(ObtainAuthToken):
 
     def post(self, request, *args, **kwargs):

@@ -74,3 +74,14 @@ class Favorite(models.Model):
   def __str__(self):
     return str(self.trivia.name)
 
+class Score(models.Model):
+  trivia = models.ForeignKey(Trivia, related_name='score', on_delete=models.CASCADE)
+  user = models.ForeignKey(settings.AUTH_USER_MODEL, related_name='score', on_delete=models.CASCADE)
+  score = models.IntegerField(default= 0)
+
+  class Meta:
+      ordering = ('id',)
+
+  def __str__(self):
+    return str(self.trivia.name)
+
