@@ -1,6 +1,6 @@
 from django.contrib import admin
 
-from .models import Category, Trivia, Question, User, Favorite
+from .models import Category, Trivia, Question, User, TriviaFavorite
 # Register your models here.
 
 @admin.register(Category)

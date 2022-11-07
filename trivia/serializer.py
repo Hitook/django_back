@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, Trivia, Question, User, Favorite
+from .models import Category, Trivia, Question, User, TriviaFavorite, CategoryFavorite,Score
 
 
 class QuestionSerializer(serializers.ModelSerializer):
@@ -18,6 +18,7 @@ class TriviaSerializer(serializers.ModelSerializer):
     model = Trivia
     fields = (
       "id",
+      "category_id",
       "name",
       "get_absolute_url",
       "description",
@@ -36,12 +37,31 @@ class CategorySerializer(serializers.ModelSerializer):
       "trivias",
     )
 
-class FavoriteSerializer(serializers.ModelSerializer):
+class TriviaFavoriteSerializer(serializers.ModelSerializer):
   class Meta:
-    model = Favorite
+    model = TriviaFavorite
     fields = (
       "id",
       "user_id",
       "trivia_id",
       "category_id",
+    )
+
+class CategoryFavoriteSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = CategoryFavorite
+    fields = (
+      "id",
+      "user_id",
+      "category_id",
+    )
+
+class ScoreSerializer(serializers.ModelSerializer):
+  class Meta:
+    model = Score
+    fields = (
+      "id",
+      "user_id",
+      "trivia_id",
+      "score",
     )
