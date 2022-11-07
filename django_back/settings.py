@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/4.1/ref/settings/
 """
 
 from pathlib import Path
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -23,10 +24,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-1k(jmy9ud&x^56zm$6#-lcqqf=17r2gb6_)n-(#uw2e_m9avjy'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 ALLOWED_HOSTS = [
-    '44.203.134.65'
+    '44.203.134.65',
+    '127.0.0.1'
 ]
 
 
@@ -43,13 +45,14 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'corsheaders',
     'djoser',
-    'trivia',
+    'trivia'
 ]
 
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8080",
     "http://10.0.0.173:8080",
-    "http://44.203.134.65"
+    "http://44.203.134.65",
+    "http://127.0.0.1:8000"
 ]
 CORS_ORIGIN_ALLOW_ALL =True
 
@@ -69,7 +72,7 @@ ROOT_URLCONF = 'django_back.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [ os.path.join(BASE_DIR, 'templates/') ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -135,8 +138,8 @@ USE_TZ = True
 
 STATIC_URL = 'static/'
 STATIC_ROOT = BASE_DIR / 'static/'
-MEDIA_URL = 'media/'
-MEDIA_ROOT = BASE_DIR / 'media/'
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR , 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.1/ref/settings/#default-auto-field

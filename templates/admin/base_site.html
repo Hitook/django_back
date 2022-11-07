@@ -1,0 +1,8 @@
+{% extends 'admin/base.html' %}
+{% load static %}
+{% block branding %}
+{% block extrastyle %}
+  <link rel='stylesheet' href='{% static 'templates/admin.css' %}'>
+{% endblock %}
+<h1 id="site-name"><a href="{% url 'admin:index' %}"  style = "color:rgb(255, 255, 255)">{{ site_header|default:_('Trivia administration') }}</a></h1>
+{% endblock %}

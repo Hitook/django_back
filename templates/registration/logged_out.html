@@ -1,0 +1,14 @@
+{% extends "admin/base_site.html" %}
+{% load i18n %}
+
+{% block breadcrumbs %}<div class="breadcrumbs" style="background-color:rgb(96, 96, 96);"><a href="{% url 'admin:index' %}"><u>{% translate 'Trivia Admin Home Page' %}</u></a></div>{% endblock %}
+
+{% block nav-sidebar %}{% endblock %}
+
+{% block content %}
+
+<p style = "color:rgb(45, 45, 45)">{% translate "Thanks for playing trivia on our website!" %}</p>
+
+<p><a href="{% url 'admin:index' %}" style = "color:rgb(31, 91, 255)"> <u>{% translate 'Log back in' %}</u></a></p>
+
+{% endblock %}
