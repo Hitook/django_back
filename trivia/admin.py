@@ -15,7 +15,7 @@ class QuestionAdmin(admin.ModelAdmin):
 @admin.register(User)
 class UserAdmin(admin.ModelAdmin):
     pass
-@admin.register(Favorite)
+@admin.register(TriviaFavorite)
 class FavoriteAdmin(admin.ModelAdmin):
     pass
 
