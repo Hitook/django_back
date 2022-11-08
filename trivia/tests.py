@@ -12,23 +12,19 @@ import collections
 
 # Create your tests here.
 class thing(TestCase):
-    def setup(self):
-        Trivia.objects.create(name='trivia', questions='1', slug='trivia', category_id='1', description='Hi')
-        Trivia.objects.create(name='math', questions='1', slug='math', category_id='2', description='Hi')
+    
+     def test_trivia(self):
 
-    def test_trivia(self):
-      Category.objects.create(name='Math')
-      Category.objects.create(name='Poetry')
+      Category.objects.create(name='Math', )
       Trivia.objects.create(name='math', questions='1', slug='math', category_id='1', description='less annoying math')
-      Trivia.objects.create(name='algerba', questions='1', slug='algebra', category_id='1', description='annoying math')
-      Trivia.objects.create(name='poetry', questions='1', slug='poetry', category_id='2', description='Hi')
-
       client = APIClient()
       response = client.get('/api/v1/latest-trivias/', format='json')
       response = response.data
-      # print(type(response))
       for item in response:
-        print(item['get_absolute_url']) 
+        print(item) 
+        self.assertEqual(item['name'], 'math')
+        self.assertEqual(item['id'], 1)
+        self.assertEqual(item['description'], 'less annoying math')
 
       # print(response.data)
       # print(response.data[0])
