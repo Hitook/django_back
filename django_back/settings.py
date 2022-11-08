@@ -24,7 +24,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-1k(jmy9ud&x^56zm$6#-lcqqf=17r2gb6_)n-(#uw2e_m9avjy'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
 ALLOWED_HOSTS = [
     '44.203.134.65',
@@ -54,6 +54,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://44.203.134.65",
     "http://127.0.0.1:8000"
 ]
+SECURE_CROSS_ORIGIN_OPENER_POLICY = None
 CORS_ORIGIN_ALLOW_ALL =True
 
 MIDDLEWARE = [
@@ -137,7 +138,7 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/4.1/howto/static-files/
 
 STATIC_URL = 'static/'
-STATIC_ROOT = BASE_DIR / 'static/'
+STATIC_ROOT = os.path.abspath(os.path.join(BASE_DIR, 'templates'))
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR , 'media')
 
