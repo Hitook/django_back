@@ -182,8 +182,10 @@ class SubmitTrivia(APIView):
       trivia_id = Trivia.objects.get(slug=trivia_slug).id
       oldscore = Score.objects.filter(trivia_id = trivia_id, user_id = user_id)
       if oldscore.exists():
+        oldscore = oldscore[0]
         oldscore.score = score
-        return oldscore.save()
+        oldscore.save()
+        return oldscore
       return Score.objects.create(trivia_id = trivia_id, user_id = user_id, score = score)
     except:
       raise HttpResponseBadRequest
