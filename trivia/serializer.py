@@ -1,5 +1,5 @@
 from rest_framework import serializers
-from .models import Category, Trivia, Question, User, TriviaFavorite, CategoryFavorite,Score
+from .models import Category, Trivia, Question, User, TriviaFavorite, CategoryFavorite, Score
 
 
 class QuestionSerializer(serializers.ModelSerializer):
