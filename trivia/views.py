@@ -1,5 +1,5 @@
 from unicodedata import category
-from django.http import Http404
+from django.http import Http404, HttpResponseBadRequest
 
 from django.shortcuts import render
 from django.db.models import Q
@@ -177,17 +177,34 @@ class IsCategoryFavorite(APIView):
     return Response(self.is_favorite(category_id, user_id))
 
 class SubmitTrivia(APIView):
-  def submit_trivia(self, user_id):
+  def submit_trivia(self, trivia_slug, user_id, score):
     try:
-      return Score.objects.create(user_id = user_id)
-    except Question.DoesNotExist:
-      raise Http404
-  def post(self, request, user_id, format=None):
-    favorites = self.submit_trivia(user_id)
-    serializer = TriviaFavoriteSerializer(favorites, many=True)
+      trivia_id = Trivia.objects.get(slug=trivia_slug).id
+      oldscore = Score.objects.filter(trivia_id = trivia_id, user_id = user_id)
+      if oldscore.exists():
+        oldscore.score = score
+        return oldscore.save()
+      return Score.objects.create(trivia_id = trivia_id, user_id = user_id, score = score)
+    except:
+      raise HttpResponseBadRequest
+  def post(self, request, trivia_slug, user_id, score, format=None):
+    submit = self.submit_trivia(trivia_slug, user_id, score)
+    serializer = ScoreSerializer(submit)
     return Response(serializer.data)
-class CustomAuthToken(ObtainAuthToken):
 
+class UserTriviaScore(APIView):
+  def get_score(self, trivia_slug, user_id):
+    try:
+      trivia_id = Trivia.objects.get(slug=trivia_slug).id
+      return Score.objects.filter(trivia_id = trivia_id, user_id = user_id)
+    except:
+      return 0
+  def get(self, request, trivia_slug, user_id, format=None):
+    score = self.get_score(trivia_slug, user_id)
+    serializer = ScoreSerializer(score, many=True)
+    return Response(serializer.data)
+
+class CustomAuthToken(ObtainAuthToken):
     def post(self, request, *args, **kwargs):
         serializer = self.serializer_class(data=request.data,
                                            context={'request': request})
@@ -201,12 +218,11 @@ class CustomAuthToken(ObtainAuthToken):
         })
 
 class UserInfo(ObtainAuthToken):
-    def post(self, request, *args, **kwargs):
-        serializer = self.serializer_class(data=request.data,
-                                           context={'request': request})
-        serializer.is_valid(raise_exception=True)
-        user = serializer.validated_data['user']
-        return Response({
+  def post(self, request, *args, **kwargs):
+    serializer = self.serializer_class(data=request.data, context={'request': request})
+    serializer.is_valid(raise_exception=True)
+    user = serializer.validated_data['user']
+    return Response({
           'username' : user.username,
           'user_id': user.pk,
           'email': user.email
