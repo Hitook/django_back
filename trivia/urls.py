@@ -23,5 +23,8 @@ urlpatterns = [
   path('category/favorite/<int:category_id>/<int:user_id>/', views.AddCategoryFavorite.as_view()),
   path('category/defavorite/<int:category_id>/<int:user_id>/', views.UnaddCategoryFavorite.as_view()),
   path('category/isfavorite/<int:category_id>/<int:user_id>/', views.IsCategoryFavorite.as_view()),
+  path('score/<slug:trivia_slug>/<int:user_id>/', views.UserTriviaScore.as_view()),
+  path('trivia/<slug:trivia_slug>/<int:user_id>/<int:score>/', views.SubmitTrivia.as_view()),
+
 
 ]

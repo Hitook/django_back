@@ -5,9 +5,9 @@ from django.contrib import admin
 from django.urls import path,include,re_path
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView, TokenVerifyView
 
-admin.site.site_header  =  "Trivia Admin"  
+admin.site.site_header =  "Trivia Admin"  
 admin.site.site_title  =  "Trivia admin site"
-admin.site.index_title  =  "Trivia Admin"
+admin.site.index_title =  "Trivia Admin"
 
 urlpatterns = [
     path('admin/', admin.site.urls),
