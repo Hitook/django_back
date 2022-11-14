@@ -1,29 +1,31 @@
-{% load i18n static %}<!DOCTYPE html>
+{% load static %}
+{% load i18n static %}
+<!DOCTYPE html>
 {% get_current_language as LANGUAGE_CODE %}{% get_current_language_bidi as LANGUAGE_BIDI %}
-<html lang="{{ LANGUAGE_CODE|default:"en-us" }}" dir="{{ LANGUAGE_BIDI|yesno:'rtl,ltr,auto' }}">
+<html lang="{{ LANGUAGE_CODE|default:'en-us' }}" dir="{{ LANGUAGE_BIDI|yesno:'rtl,ltr,auto' }}">
 <head>
 <title>{% block title %}{% endblock %}</title>
-<link rel="stylesheet" href="{{ STATIC_URL }}base.css">
+<link rel="stylesheet" href="{% static 'static/admin/css/base.css' %}">
 {% block dark-mode-vars %}
-  <link rel="stylesheet" href="{{ STATIC_URL }}dark_mode.css">
+  <link rel="stylesheet" href="{% static 'static/admin/css/dark_mode.css' %}">
 {% endblock %}
 {% if not is_popup and is_nav_sidebar_enabled %}
-  <link rel="stylesheet" href="{{ STATIC_URL }}nav_sidebar.css">
-  <script src="{% static 'admin/js/nav_sidebar.js' %}" defer></script>
+  <link rel="stylesheet" href="{% static 'static/admin/css/nav_sidebar.css' %}">
+  <script src="{% static 'static/admin/js/nav_sidebar.js' %}" defer></script>
 {% endif %}
-{% block extrastyle %}{% endblock %}
-{% if LANGUAGE_BIDI %}<link rel="stylesheet" href="{{ STATIC_URL }}rtl.css">{% endif %}
+
+{% if LANGUAGE_BIDI %}<link rel="stylesheet" href="{% block stylesheet_rtl %}{% static 'static/admin/css/rtl.css' %}{% endblock %}">{% endif %}
 {% block extrahead %}{% endblock %}
 {% block responsive %}
     <meta name="viewport" content="user-scalable=no, width=device-width, initial-scale=1.0, maximum-scale=1.0">
-    <link rel="stylesheet" href="{{ STATIC_URL }}responsive.css">
-    {% if LANGUAGE_BIDI %}<link rel="stylesheet" href="{{ STATIC_URL }}responsive_rtl.css">{% endif %}
+    <link rel="stylesheet" href="{% static 'static/admin/css/responsive.css' %}">
+    {% if LANGUAGE_BIDI %}<link rel="stylesheet" href="{% static 'static/admin/css/responsive_rtl.css' %}">{% endif %}
 {% endblock %}
 {% block blockbots %}<meta name="robots" content="NONE,NOARCHIVE">{% endblock %}
 </head>
 
 <body class="{% if is_popup %}popup {% endif %}{% block bodyclass %}{% endblock %}"
-  data-admin-utc-offset="{% now "Z" %}">
+  data-admin-utc-offset="{% now 'Z' %}">
 
 <!-- Container -->
 <div id="container">
@@ -31,7 +33,7 @@
     {% if not is_popup %}
     <!-- Header -->
     {% block header %}
-    <div id="header" style="background-color:rgb(76, 76, 76);" >
+    <div id="header" style="background-color:rgb(79, 79, 79);" >
         <div id="branding">
         {% block branding %}{% endblock %}
         <h1  style = "color:rgb(255, 255, 255)"> Hello From Trivia </h1>
