@@ -1,0 +1,11 @@
+#header{
+    height: 50px;
+    background: #aabbdd;
+    color: #000;
+  }
+  #header a:link, #header a:visited {
+      color: #797979;
+  }
+  #branding h1{
+    color: #000;
+  }
